@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{8D770754-500C-4301-9AB4-0146937B54BE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{22BB4E52-2C69-46D3-81C7-0F99027B4F23}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+	EndProjectSection
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Roslyn.Resolvers.Demo", "src\Roslyn.Resolvers.Demo\Roslyn.Resolvers.Demo.xproj", "{8106F57F-FB0D-4F61-9206-4EE1C5B687CE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8106F57F-FB0D-4F61-9206-4EE1C5B687CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8106F57F-FB0D-4F61-9206-4EE1C5B687CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8106F57F-FB0D-4F61-9206-4EE1C5B687CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8106F57F-FB0D-4F61-9206-4EE1C5B687CE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8106F57F-FB0D-4F61-9206-4EE1C5B687CE} = {8D770754-500C-4301-9AB4-0146937B54BE}
+	EndGlobalSection
+EndGlobal
