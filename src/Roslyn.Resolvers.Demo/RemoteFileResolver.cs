@@ -4,33 +4,24 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 using System.Net.Http;
+using System.Text;
 
 namespace Roslyn.Resolvers.Demo
 {
     public class RemoteFileResolver : SourceReferenceResolver
     {
-        private Dictionary<string, Stream> remoteFiles = new Dictionary<string, Stream>();
-        private SourceFileResolver fileBasedResolver;
+        private readonly Dictionary<string, string> _remoteFiles = new Dictionary<string, string>();
+        private readonly SourceFileResolver _fileBasedResolver;
 
         public RemoteFileResolver(ImmutableArray<string> searchPaths, string baseDirectory)
         {
-            fileBasedResolver = new SourceFileResolver(searchPaths, baseDirectory);
-        }
-
-        public override bool Equals(object other)
-        {
-            return false;
-        }
-
-        public override int GetHashCode()
-        {
-            return -1;
+            _fileBasedResolver = new SourceFileResolver(searchPaths, baseDirectory);
         }
 
         public override string NormalizePath(string path, string baseFilePath)
         {
             var uri = GetUri(path);
-            if (uri == null) return fileBasedResolver.NormalizePath(path, baseFilePath);
+            if (uri == null) return _fileBasedResolver.NormalizePath(path, baseFilePath);
 
             return path;
         }
@@ -38,22 +29,32 @@ namespace Roslyn.Resolvers.Demo
         public override Stream OpenRead(string resolvedPath)
         {
             var uri = GetUri(resolvedPath);
-            if (uri == null) return fileBasedResolver.OpenRead(resolvedPath);
+            if (uri == null) return _fileBasedResolver.OpenRead(resolvedPath);
 
-            return remoteFiles[resolvedPath];
+            if (_remoteFiles.ContainsKey(resolvedPath))
+            {
+                var storedFile = _remoteFiles[resolvedPath];
+                return new MemoryStream(Encoding.UTF8.GetBytes(storedFile));
+            }
+
+            return Stream.Null;
         }
 
         public override string ResolveReference(string path, string baseFilePath)
         {
             var uri = GetUri(path);
-            if (uri == null) return fileBasedResolver.ResolveReference(path, baseFilePath);
+            if (uri == null) return _fileBasedResolver.ResolveReference(path, baseFilePath);
 
             var client = new HttpClient();
             var response = client.GetAsync(path).Result;
 
             if (response.IsSuccessStatusCode)
             {
-                remoteFiles.Add(path, response.Content.ReadAsStreamAsync().Result);
+                var responseFile = response.Content.ReadAsStringAsync().Result;
+                if (!string.IsNullOrWhiteSpace(responseFile))
+                {
+                    _remoteFiles.Add(path, responseFile);
+                }
             }
             return path;
         }
@@ -69,6 +70,30 @@ namespace Roslyn.Resolvers.Demo
             }
 
             return null;
+        }
+
+        protected bool Equals(RemoteFileResolver other)
+        {
+            return Equals(_remoteFiles, other._remoteFiles) && Equals(_fileBasedResolver, other._fileBasedResolver);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((RemoteFileResolver)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = 37;
+                hashCode = (hashCode * 397) ^ (_remoteFiles?.GetHashCode() ?? 0);
+                hashCode = (hashCode * 397) ^ (_fileBasedResolver?.GetHashCode() ?? 0);
+                return hashCode;
+            }
         }
     }
 }
