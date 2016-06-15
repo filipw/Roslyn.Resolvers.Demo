@@ -17,8 +17,7 @@ namespace Roslyn.Resolvers.Demo
 
             var opts = ScriptOptions.Default.
                 AddImports("System").
-                WithSourceResolver(new RemoteFileResolver(ImmutableArray.Create(new string[0]), 
-                AppContext.BaseDirectory));
+                WithSourceResolver(new RemoteFileResolver());
 
             var script = CSharpScript.Create(code, opts);
             var result = script.RunAsync().Result;

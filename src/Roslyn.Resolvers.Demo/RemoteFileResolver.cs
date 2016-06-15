@@ -13,6 +13,11 @@ namespace Roslyn.Resolvers.Demo
         private readonly Dictionary<string, string> _remoteFiles = new Dictionary<string, string>();
         private readonly SourceFileResolver _fileBasedResolver;
 
+        public RemoteFileResolver() : this(ImmutableArray.Create(new string[0]),
+                AppContext.BaseDirectory)
+        {
+        }
+
         public RemoteFileResolver(ImmutableArray<string> searchPaths, string baseDirectory)
         {
             _fileBasedResolver = new SourceFileResolver(searchPaths, baseDirectory);
