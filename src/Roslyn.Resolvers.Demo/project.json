@@ -1,7 +1,8 @@
 {
   "version": "1.0.0-*",
   "buildOptions": {
-    "emitEntryPoint": true
+    "emitEntryPoint": true,
+    "copyToOutput": [ "foo.csx", "main.csx" ]
   },
 
   "dependencies": {
@@ -16,6 +17,5 @@
     "netcoreapp1.0": {
       "imports": "dnxcore50"
     }
-  },
-  "contentFiles": [ "foo.csx" ]
+  }
 }

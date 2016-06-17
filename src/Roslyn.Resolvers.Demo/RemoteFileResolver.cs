@@ -64,7 +64,7 @@ namespace Roslyn.Resolvers.Demo
             return path;
         }
 
-        private Uri GetUri(string input)
+        private static Uri GetUri(string input)
         {
             Uri uriResult;
             if (Uri.TryCreate(input, UriKind.Absolute, out uriResult)
