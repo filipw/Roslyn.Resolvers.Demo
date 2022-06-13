@@ -10,10 +10,10 @@ namespace Roslyn.Resolvers.Demo
 {
     public class RemoteFileResolver : SourceReferenceResolver
     {
-        private readonly Dictionary<string, string> _remoteFiles = new Dictionary<string, string>();
+        private readonly Dictionary<string, string> _remoteFiles = new();
         private readonly SourceFileResolver _fileBasedResolver;
 
-        public RemoteFileResolver() : this(ImmutableArray.Create(new string[0]),
+        public RemoteFileResolver() : this(ImmutableArray.Create(Array.Empty<string>()),
                 AppContext.BaseDirectory)
         {
         }
@@ -66,8 +66,7 @@ namespace Roslyn.Resolvers.Demo
 
         private static Uri GetUri(string input)
         {
-            Uri uriResult;
-            if (Uri.TryCreate(input, UriKind.Absolute, out uriResult)
+            if (Uri.TryCreate(input, UriKind.Absolute, out Uri uriResult)
                           && (uriResult.Scheme == "http"
                               || uriResult.Scheme == "https"))
             {
@@ -84,7 +83,7 @@ namespace Roslyn.Resolvers.Demo
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
+            if (obj is null) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
             return Equals((RemoteFileResolver)obj);
