@@ -1,7 +1,6 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
 using System;
-using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using Microsoft.CodeAnalysis;
@@ -31,8 +30,6 @@ namespace Roslyn.Resolvers.Demo
             {
                 var result = script.RunAsync().Result;
             }
-
-            Console.ReadKey();
         }
     }
 }
